@@ -18,15 +18,6 @@ make install
 
 > `BIN_DIR = ~/bin`, make sure this directory is added to PATH.
 
-## workflow
-```shell
-# 1. clean up decoded files in current directory
-ncm_clean.py [-f]
-# 2. decode .ncm files in current directory
-ncmc
-# 3. upload music files (except .ncm files) in current directory
-ncm_upload.py
-```
 
 ## usage
 - ncm_clean.py
@@ -47,7 +38,7 @@ options:
 $ ncm_upload.py -h
 usage: ncm_upload.py [-h] [filepath]
 
-Upload music files (except .ncm files) in current directory.
+Upload music files in current directory ('.ncm' files will be automatically decoded).
 
 positional arguments:
   filepath    a single file or directory, defaults to current directory

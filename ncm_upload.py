@@ -249,7 +249,7 @@ def upload_dir(root):
 
 
 # ============================ Main ============================ #
-parser = argparse.ArgumentParser(description="Upload music files (except .ncm files) in current directory.")
+parser = argparse.ArgumentParser(description="Upload music files in current directory ('.ncm' files will be automatically decoded).")
 parser.add_argument("filepath", nargs='?', default=BASE_DIR, help="a single file or directory, defaults to current directory")
 args = parser.parse_args()
 
@@ -257,6 +257,12 @@ filepath = os.path.abspath(args.filepath)
 isdir = os.path.isdir(filepath)
 print(f"{filepath} \t isdir={isdir}")
 
+# decode .ncm files
+print(f"\n[INFO] Decoding .ncm files in {filepath}")
+os.system('ncmc')
+print("===============================================================\n\n")
+
+print("[INFO] Uploading music files")
 login()
 if isdir:
     upload_dir(filepath)
