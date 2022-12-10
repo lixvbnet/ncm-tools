@@ -64,7 +64,7 @@ def upload(f, sleep=3):
     # name  .ext
     fname_without_ext, ext = os.path.splitext(fname)
     if (ext not in MUSIC_EXTENSIONS) or (ext in IGNORED_MUSIC_EXTENSIONS):
-        print(f"Ignoring {f}")
+        print(f"[WARN] Ignoring {f}")
         return
 
     print(f'[INFO] Uploading {f}')
@@ -116,8 +116,9 @@ def upload(f, sleep=3):
 
     if not successful:
         print(f"FAILED to upload the file after retrying {max_retry} times!")
-        UPLOAD_FAILED.append(f)
-        print(f"Appended to fail-list (in memory)")
+        if f not in UPLOAD_FAILED:
+            UPLOAD_FAILED.append(f)
+            print(f"Appended to fail-list (in memory)")
         return
 
     print("Upload successfully!")
@@ -178,14 +179,12 @@ filepath = os.path.abspath(args.filepath)
 isdir = os.path.isdir(filepath)
 print(f"{filepath} \t isdir={isdir}")
 
-# decode .ncm files
-print(f"\n[INFO] Decoding .ncm files in {filepath}")
-os.system('ncmc')
-print("===============================================================\n\n")
-
-print("[INFO] Uploading music files")
 login()
 if isdir:
+    print(f"\n[INFO] Decoding .ncm files in {filepath}")
+    os.system('ncmc ' + filepath)
+    print("===============================================================\n\n")
+    print(f"[INFO] Uploading music files")
     upload_dir(filepath)
 else:
     upload(filepath, sleep=0)
