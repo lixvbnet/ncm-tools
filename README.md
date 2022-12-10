@@ -8,7 +8,7 @@ Upload music with ease.
 ## install
 ```shell
 # install dependencies
-pip3 install pyncm tinytag qrcode
+pip3 install pyncm tinytag qrcode Image
 
 # clone this repo and install the python scripts
 git clone https://github.com/lixvbnet/ncm-tools.git
