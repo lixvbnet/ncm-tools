@@ -1,6 +1,7 @@
 os = $(shell uname | awk '{print tolower($$0)}')
 BIN_DIR = ~/bin
 
+.PHONY: install create_folders install_py_files install_bin_files demo
 
 install: create_folders install_py_files install_bin_files
 
@@ -18,3 +19,9 @@ install_bin_files:
 
 create_folders:
 	mkdir -p $(BIN_DIR)
+
+
+# create demo gif
+demo:
+	cd demo && \
+	vhs < demo.tape

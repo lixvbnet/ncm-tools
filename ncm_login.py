@@ -11,12 +11,16 @@ SESSION_FILE = os.getenv("HOME") + "/.ncm_cloud.key"
 DEBUG = False
 
 
+def mask(s):
+    return s[0] + '*'*(len(s)-2) + s[-1]
+
+
 def login():
     if os.path.isfile(SESSION_FILE):
         with open(SESSION_FILE) as f:
             print(f"Loading session info from {SESSION_FILE}")
             pyncm.SetCurrentSession(LoadSessionFromString(f.read()))
-            print("读取登录信息成功:[ %s ]" % pyncm.GetCurrentSession().login_info['content']['profile']['nickname'])
+            print("读取登录信息成功:[ %s ]" % mask(pyncm.GetCurrentSession().login_info['content']['profile']['nickname']))
             return
     else:
         print("请选择登录方式:\n[1]手机号+密码登录  [2]手机号+验证码登录  [3]二维码登录")

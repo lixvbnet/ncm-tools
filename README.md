@@ -1,6 +1,8 @@
 ## ncm-tools
 Upload music with ease.
 
+![demo](./demo/demo.gif)
+
 - Upload music to NetEase Cloud in Mac, Linux, and of course, Windows
 - Automatically retry when upload fails (up to 5 times)
 - Reserve music meta info when decoding `.ncm` files
