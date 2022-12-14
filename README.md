@@ -7,14 +7,13 @@ Upload music with ease.
 - Automatically retry when upload fails (up to 5 times)
 - Reserve music meta info when decoding `.ncm` files
 
+> For other tools, read [docs](./docs) section.
+
 ## install
 ```shell
-# install dependencies
-pip3 install pyncm tinytag qrcode Image
-
-# clone this repo and install the python scripts
 git clone https://github.com/lixvbnet/ncm-tools.git
 cd ncm-tools
+pip3 install -r requirements.txt
 make install
 ```
 

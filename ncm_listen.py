@@ -6,7 +6,7 @@ from pyncm.apis import *
 from ncm_login import login
 
 DEBUG = False
-MAX_LISTEN = 350
+MAX_LISTEN = random.randint(320, 500)
 
 
 @WeapiCryptoRequest
@@ -81,7 +81,8 @@ for p in random.sample(playlists, len(playlists)):
     exit_flag = False
     songs = []
     # random choose songs
-    for i, song in enumerate(random.sample(songList, len(songList))):
+    max_listen_per_playlist = random.randint(50, 70)
+    for i, song in enumerate(random.sample(songList, len(songList))[:max_listen_per_playlist]):
         if count >= MAX_LISTEN:
             exit_flag = True
             break
