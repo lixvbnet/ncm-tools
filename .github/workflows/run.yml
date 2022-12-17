@@ -6,9 +6,9 @@ on:
 #  pull_request:
 #    branches: [ master ]
   schedule:
-    - cron: 0 02,10 * * *
+    - cron: 0 02,09 * * *
   # Run every day at above hours (UTC), add 8 hours to get UTC+8
-  # UTC+8:    10,18
+  # UTC+8:    10,17
   watch:
     types: started
 
