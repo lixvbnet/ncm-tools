@@ -18,11 +18,11 @@ jobs:
     if: (github.event_name == 'schedule') || (github.event.repository.owner.id == github.event.sender.id)
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: 初始化Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.7
+        python-version: '3.10'
     - name: 签到听歌
       env:
         SESSION_STRING: ${{ secrets.SESSION_STRING }}
