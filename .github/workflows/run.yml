@@ -22,7 +22,7 @@ jobs:
     - name: 初始化Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.7'
     - name: 签到听歌
       env:
         SESSION_STRING: ${{ secrets.SESSION_STRING }}
@@ -32,4 +32,5 @@ jobs:
         echo
         echo "============================================"
         echo
+        sleep 1
         python3 ncm_listen.py
