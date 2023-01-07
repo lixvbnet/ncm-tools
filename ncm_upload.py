@@ -144,7 +144,7 @@ def upload_dir(root):
             UPLOAD_FAILED = pickle.load(fp)
             print(f"[INFO] Only uploading files in {UPLOAD_FAILED_FILE}:")
             print(f"{UPLOAD_FAILED}")
-            fileList = UPLOAD_FAILED
+            fileList = UPLOAD_FAILED.copy()
 
     if not fileList:
         fileList = os.listdir(root)
