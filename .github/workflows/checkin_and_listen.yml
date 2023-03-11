@@ -1,0 +1,36 @@
+name: 签到听歌
+
+on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+  schedule:
+    - cron: 0 02,09,13 * * *
+  # Run every day at above hours (UTC), add 8 hours to get UTC+8
+  # UTC+8:    10,17,21
+  watch:
+    types: started
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'schedule') || (github.event.repository.owner.id == github.event.sender.id)
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 初始化Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: 签到听歌
+      env:
+        SESSION_STRING: ${{ secrets.SESSION_STRING }}
+      run: |
+        pip install -r requirements.txt
+        python3 ncm_checkin.py
+        echo
+        echo "============================================"
+        echo
+        sleep 1
+        python3 ncm_listen.py

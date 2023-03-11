@@ -1,0 +1,5 @@
+pyncm
+tinytag
+qrcode
+image
+requests

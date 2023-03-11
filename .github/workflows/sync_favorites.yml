@@ -1,0 +1,31 @@
+name: 同步我喜欢歌单
+
+on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+  schedule:
+    - cron: 0 16 * * *
+  # Run every day at above hours (UTC), add 8 hours to get UTC+8
+  # UTC+8:    00
+  watch:
+    types: started
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'schedule') || (github.event.repository.owner.id == github.event.sender.id)
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 初始化Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: 同步我喜欢歌单
+      env:
+        SESSION_STRING: ${{ secrets.SESSION_STRING }}
+      run: |
+        pip install -r requirements.txt
+        python3 ncm_sync_fav.py
