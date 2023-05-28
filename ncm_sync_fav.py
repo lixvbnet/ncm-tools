@@ -20,12 +20,15 @@ def sync_fav(nocleanup=False):
         exit(1)
 
     print(f'{cCount} songs in cloud disk.\n')
+    # songId -> cSong
+    tmpSongMap = {}
+    for item in cSongs:
+        tmpSongMap[item['songId']] = item
 
 
     res = user.GetUserPlaylists(user_id=0, offset=0, limit=2)
     # print(res)
     # with open('tmp.json', 'w') as f: f.write(json.dumps(res))
-
 
     # === get first playlist === #
     p = res['playlist'][0]
@@ -47,7 +50,9 @@ def sync_fav(nocleanup=False):
     for _, song in enumerate(songs):
         songId = song['id']
         # check if the song is already uploaded to cloud disk
-        if songId in cSongIds: continue
+        if songId in cSongIds:
+            del tmpSongMap[songId]
+            continue
 
         # current song is not in cloud disk
         count += 1
@@ -95,6 +100,12 @@ def sync_fav(nocleanup=False):
     print(f"\n--------- fail list ({len(fail_list)}) ---------")
     for item in fail_list:
         print(item)
+
+    if len(tmpSongMap) > 0:
+        print(f"\n\n--------------------------------------------------")
+        print(f"[WARN] Found {len(tmpSongMap)} songs that are in cloud disk but missing in Fav playlist!")
+        for item in tmpSongMap.values():
+            print("songId=[%s], songName=[%s], artist=[%s]" % (item['songId'], item['songName'], item['artist']))
 
 
 # ============================ Main ============================ #

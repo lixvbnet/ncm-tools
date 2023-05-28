@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import re
 import requests
 from pyncm.apis import *
@@ -36,10 +37,18 @@ def download(songId, fileNameWithoutExt):
 
 # ============================ Main ============================ #
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("songId", nargs='?', help="")
+    parser.add_argument("fileNameWithoutExt", nargs='?', help="")
+    args = parser.parse_args()
+
+    # Tests
+    # songId = 119659   # No copyright (url is null)
+    # songId = 287057   # flac (seems won't appear ncm)
+    songId = args.songId
+    fileNameWithoutExt = args.fileNameWithoutExt
+
     login()
 
-    # songId = 119659   # No copyright (url is null)
-    songId = 287057   # flac (seems won't appear ncm)
-
-    fileName = download(songId, "tmp")
+    fileName = download(songId, fileNameWithoutExt)
     print(fileName)
