@@ -14,7 +14,7 @@ def sync_fav(nocleanup=False):
     cloud_res = cloud.GetCloudDriveInfo(limit=10000, offset=0)
     cCount = cloud_res['count']
     cSongs = cloud_res['data']
-    cSongIds = list(map(lambda item: item['songId'], cSongs))
+    cSongIds = list(map(lambda _item: _item['songId'], cSongs))
     if len(cSongIds) != cCount:
         print(f"[ERROR] only got {cSongIds} song ids from {cCount} songs!")
         exit(1)
@@ -22,8 +22,8 @@ def sync_fav(nocleanup=False):
     print(f'{cCount} songs in cloud disk.\n')
     # songId -> cSong
     tmpSongMap = {}
-    for item in cSongs:
-        tmpSongMap[item['songId']] = item
+    for cs in cSongs:
+        tmpSongMap[cs['songId']] = cs
 
 
     res = user.GetUserPlaylists(user_id=0, offset=0, limit=2)
@@ -51,7 +51,17 @@ def sync_fav(nocleanup=False):
         songId = song['id']
         # check if the song is already uploaded to cloud disk
         if songId in cSongIds:
-            del tmpSongMap[songId]
+            if songId in tmpSongMap:
+                # print(f"[INFO] deleting {songId} from tmpSongMap ({len(tmpSongMap)})")
+                del tmpSongMap[songId]
+            else:   # TBD
+                print(f"[WARN] {songId} does not exist in tmpSongMap! " +
+                      "This can only happen if this song appears more than once in Fav playlist!")
+                print(f"tmpSongMap: {tmpSongMap}")
+                songIds = list(map(lambda _item: _item['id'], songs))
+                print(f"songIds in Fav: {songIds}")
+                print(f"In principle this should NOT happen (but actually happened once). Raise the exception!")
+                raise RuntimeError(f"{songId} appears more than once in Fav playlist??")
             continue
 
         # current song is not in cloud disk
@@ -98,14 +108,14 @@ def sync_fav(nocleanup=False):
     print(f"\n\n==================================================")
     print(f"count: {count}, success: {success}, fail: {fail}")
     print(f"\n--------- fail list ({len(fail_list)}) ---------")
-    for item in fail_list:
-        print(item)
+    for cs in fail_list:
+        print(cs)
 
     if len(tmpSongMap) > 0:
         print(f"\n\n--------------------------------------------------")
         print(f"[WARN] Found {len(tmpSongMap)} songs that are in cloud disk but missing in Fav playlist!")
-        for item in tmpSongMap.values():
-            print("songId=[%s], songName=[%s], artist=[%s]" % (item['songId'], item['songName'], item['artist']))
+        for cs in tmpSongMap.values():
+            print("songId=[%s], songName=[%s], artist=[%s]" % (cs['songId'], cs['songName'], cs['artist']))
 
 
 # ============================ Main ============================ #
