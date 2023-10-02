@@ -14,8 +14,9 @@ def get_songs(song_ids: [int]) -> list:
     songs_dict = []
     step = 1000     # the api has a top limit of 1000
     i = 0
-    while i < len(song_ids):
-        tmp_ids = song_ids[i:i+step]
+    n = len(song_ids)
+    while i < n:
+        tmp_ids = song_ids[i:min(n, i+step)]
         songs_dict.extend(track.GetTrackDetail(tmp_ids)['songs'])
         i += step
     return songs_dict
@@ -79,7 +80,7 @@ def sync_fav(nocleanup=False):
                 print(f"[WARN] {songId} does not exist in tmpSongMap! " +
                       "This can only happen if this song appears more than once in Fav playlist!")
                 print(f"tmpSongMap: {tmpSongMap}")
-                songIds = list(map(lambda _item: _item['id'], songs))
+                # songIds = list(map(lambda _item: _item['id'], songs))
                 print(f"songIds in Fav: {songIds}")
                 print(f"In principle this should NOT happen (but actually happened once). Raise the exception!")
                 raise RuntimeError(f"{songId} appears more than once in Fav playlist??")
