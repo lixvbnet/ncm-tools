@@ -6,10 +6,25 @@ from ncm_login import *
 from ncm_download import download
 from ncm_upload import upload
 
-"""
-Sync favorite songs (first playlist) to cloud disk.
-"""
+
+def get_songs(song_ids: [int]) -> list:
+    """
+    Get Songs Detail, without the len(song_ids) <= 1000 limit.
+    """
+    songs_dict = []
+    step = 1000     # the api has a top limit of 1000
+    i = 0
+    while i < len(song_ids):
+        tmp_ids = song_ids[i:i+step]
+        songs_dict.extend(track.GetTrackDetail(tmp_ids)['songs'])
+        i += step
+    return songs_dict
+
+
 def sync_fav(nocleanup=False):
+    """
+    Sync favorite songs (first playlist) to cloud disk.
+    """
     # === get all songs in cloud disk === #
     cloud_res = cloud.GetCloudDriveInfo(limit=10000, offset=0)
     cCount = cloud_res['count']
@@ -34,12 +49,18 @@ def sync_fav(nocleanup=False):
     p = res['playlist'][0]
     print("playlist: [%s]" % mask(p['name']))
 
-    pInfo = playlist.GetPlaylistInfo(p['id'], total=True)
+    pInfo = playlist.GetPlaylistInfo(p['id'], total=True, limit=10000)
     pList = pInfo['playlist']
-    # songIds = list(map(lambda item: item['id'], pList['trackIds']))
-    # print(f"{len(songIds)} songs")
-    songs = pList['tracks']
-    print(f"{len(songs)} songs\n")
+    # with open('tmp.json', 'w') as f: f.write(json.dumps(pList))
+
+    songIds = list(map(lambda item: item['id'], pList['trackIds']))
+    print(f"{len(songIds)} songs\n")
+    # songs = pList['tracks']           # tracks has a top limit of 1000.
+    songs = get_songs(songIds)
+
+    if len(songs) != len(songIds):
+        print(f"[WARN] len(songIds)={len(songIds)}, but len(songs)={len(songs)}. They are expected to be equal!")
+        print(f"[WARN] Only enumerate first {len(songs)} songs in the playlist.")
 
 
     # === download, convert, upload to cloud disk, and rectify === #
