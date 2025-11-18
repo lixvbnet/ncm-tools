@@ -72,7 +72,6 @@ options:
 ```
 
 
-
 ## thanks
 - [magic-akari/ncmc](https://github.com/magic-akari/ncmc)
 - [mos9527/pyncm](https://github.com/mos9527/pyncm)
