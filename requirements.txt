@@ -1,4 +1,5 @@
-pyncm
+# pyncm
+git+https://github.com/lixvbnet/pyncm.git#egg=pyncm
 tinytag
 qrcode
 image
